@@ -1,23 +1,26 @@
 package me.feixie.hackernews
 
 import android.app.Activity
+import android.os.Bundle
 import android.support.v4.app.FragmentManager
 
-val NEW_STORY = "new_story"
-val BEST_STORY = "best_story"
-val TOP_STORY = "top_story"
-val SHOW_STORY = "show_story"
-val ASK_STORY = "ask_story"
-val JOB_STORY = "job_story"
+val NEW_STORY = "newstories.json"
+val BEST_STORY = "beststories.json"
+val TOP_STORY = "topstories.json"
+val SHOW_STORY = "showstories.json"
+val ASK_STORY = "askstories.json"
+val JOB_STORY = "jobstories.json"
+val FRAGMENT_TAG = "fragment_tag"
 
-fun Activity.openFragment(fm:FragmentManager, tag:String) {
+fun Activity.openFragment(fm: FragmentManager, tag: String) {
     val fragment = fm.findFragmentByTag(tag)
     if (fragment != null) {
         fm.beginTransaction().replace(R.id.flContainer, fragment).commit()
     } else {
-        when (tag) {
-            NEW_STORY -> fm.beginTransaction().replace(R.id.flContainer, NewStoryFragment()).commit()
-            else -> fm.beginTransaction().replace(R.id.flContainer, NewStoryFragment()).commit()
-        }
+        val newFragment = NewStoryFragment.newInstance()
+        val bundle = Bundle()
+        bundle.putString(FRAGMENT_TAG, tag)
+        newFragment.arguments = bundle
+        fm.beginTransaction().replace(R.id.flContainer, newFragment, tag).commit()
     }
 }
